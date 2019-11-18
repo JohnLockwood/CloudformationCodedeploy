@@ -1,0 +1,74 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  EC2AccessToCodeDeploy:    
+    Type: AWS::IAM::Role
+    Properties:            
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17        
+        Statement:
+          - Effect: Allow
+            Principal: 
+              Service:
+                - ec2.amazonaws.com 
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess 
+      RoleName: EC2CodeDeployByCFN
+      Description: Cloudformation created allows ec2 full access to CodeDeploy
+      Tags:
+        -
+          Key: course
+          Value: AWS Devops Professional
+        -
+          Key: removeAfter
+          Value: 06/2020
+  CodeDeployRole:    
+    Type: AWS::IAM::Role
+    Properties:            
+      RoleName: CodeDeployRoleByCFN
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17        
+        Statement:
+          - Effect: Allow
+            Principal: 
+              Service:
+                - codedeploy.amazonaws.com 
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
+      Description: Cloudformation created allows CodeDeploy to Do Its Thing
+      Tags:
+        -
+          Key: course
+          Value: AWS Devops Professional
+        -
+          Key: removeAfter
+          Value: 06/2020
+  AWSDevopsProCourseLoadBalancer:
+    Type:  AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name:  AWSDevopsProCourseLoadBalancer
+      Type:  application
+      Scheme: internet-facing
+      IPAddressType:  ipv4
+      SecurityGroup: !Ref AWSDevopsProCourseLoadBalancerSecurityGroup
+      Subnets:
+        - arn:aws:ec2:us-east-1:363498436337:subnet/subnet-b5ccf49a
+        - arn:aws:ec2:us-east-1:363498436337:subnet/subnet-2c1fb223
+  AWSDevopsProCourseLoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: AWSDevopsProCourseLoadBalancerSecurityGroup
+      GroupDescription: Allow HTTP on Port 80 for load balancer
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+
