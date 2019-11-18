@@ -55,8 +55,9 @@ Resources:
       Name:  AWSDevopsProCourseLoadBalancer
       Type:  application
       Scheme: internet-facing
-      IPAddressType:  ipv4
-      SecurityGroup: !Ref AWSDevopsProCourseLoadBalancerSecurityGroup
+      IpAddressType:  ipv4
+      SecurityGroups: 
+        - !Ref AWSDevopsProCourseLoadBalancerSecurityGroup
       Subnets:
         - arn:aws:ec2:us-east-1:363498436337:subnet/subnet-b5ccf49a
         - arn:aws:ec2:us-east-1:363498436337:subnet/subnet-2c1fb223

@@ -4,3 +4,5 @@ This is a template to set up the environment for the CodeDeploy lesson in ACloud
 
 To get through the course quickly, it's overkill, but there's not much point in taking a course if you don't also stop to learn something along the way. :)
 
+Currently this is a work in progress and should not be overly relied upon.
+
