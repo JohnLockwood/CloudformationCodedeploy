@@ -51,20 +51,21 @@ Resources:
           Value: 06/2020
   AWSDevopsProCourseLoadBalancer:
     Type:  AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties:
+    DependsOn: AWSDevopsProCourseLoadBalancerSecurityGroup
+    Properties:      
       Name:  AWSDevopsProCourseLoadBalancer
       Type:  application
       Scheme: internet-facing
       IpAddressType:  ipv4
       SecurityGroups: 
-        - !Ref AWSDevopsProCourseLoadBalancerSecurityGroup
+        - Fn::GetAtt: [ AWSDevopsProCourseLoadBalancerSecurityGroup, GroupId ] 
       Subnets:
-        - arn:aws:ec2:us-east-1:363498436337:subnet/subnet-b5ccf49a
-        - arn:aws:ec2:us-east-1:363498436337:subnet/subnet-2c1fb223
+        - subnet-976e46a8
+        - subnet-b5ccf49a
   AWSDevopsProCourseLoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: AWSDevopsProCourseLoadBalancerSecurityGroup
+      GroupName: AWSDevopsProLoadBalancer
       GroupDescription: Allow HTTP on Port 80 for load balancer
       SecurityGroupIngress:
         - IpProtocol: tcp
