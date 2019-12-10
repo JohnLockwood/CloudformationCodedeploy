@@ -25,6 +25,16 @@ Resources:
         -
           Key: removeAfter
           Value: 06/2020
+  
+  EC2AccessToCodeDeployInstanceProfile:      
+    Type: AWS::IAM::InstanceProfile
+    DependsOn: EC2AccessToCodeDeploy
+    Properties: 
+      InstanceProfileName: EC2AccessToCodeDeployInstanceProfile
+      Path: /
+      Roles: 
+        - !Ref EC2AccessToCodeDeploy
+
   CodeDeployRole:    
     Type: AWS::IAM::Role
     Properties:            
@@ -66,7 +76,17 @@ Resources:
         - subnet-ca300997
         - subnet-976e46a8
         - subnet-6e0f130a
-  
+
+  HTTPlistener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: "forward"
+          TargetGroupArn: !Ref AWSDevOpsAutoTargetGroup
+      LoadBalancerArn: !Ref AWSDevopsProCourseLoadBalancer
+      Port: 80
+      Protocol: HTTP
+
   AWSDevOpsAutoTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -101,7 +121,7 @@ Resources:
       AutoScalingGroupName: AWSDevOpsAutoScalingGroup
       AvailabilityZones:
         Fn::GetAZs: ''
-      MinSize: 1
+      MinSize: 3
       MaxSize: 3
       TargetGroupARNs:        
         - !Ref AWSDevOpsAutoTargetGroup
@@ -112,7 +132,22 @@ Resources:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       LaunchConfigurationName: AWSDevOpsLaunchConfiguration
-      ImageId:  ami-00068cd7555f543d5
+      ImageId:  ami-04b9e92b5572fa0d1
+      KeyName: NorthernVirginiaMyEC2KeyPair
       InstanceType: t2.micro
       SecurityGroups:
         - Ref: AWSDevopsProCourseLoadBalancerSecurityGroup
+      IamInstanceProfile: !Ref EC2AccessToCodeDeployInstanceProfile
+      UserData: 
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            sudo apt-get update -y
+            sudo apt-get install ruby -y
+            sudo apt-get install wget -y
+            cd /home/ubuntu
+            wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
+            chmod +x ./install
+            sudo ./install auto
+            service codedeploy-agent start
+            rm install
