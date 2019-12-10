@@ -62,6 +62,23 @@ Resources:
       Subnets:
         - subnet-976e46a8
         - subnet-b5ccf49a
+  
+  # AWSDevOpsAutoTargetGroup:
+  #   Type: AWS::ElasticLoadBalancingV2::TargetGroup
+  #   Properties:
+  #     Name: AWSDevOpsAutoTargetGroup
+  #     HealthCheckPath: /
+  #     HealthCheckProtocol: HTTP
+  #     Protocol:  HTTP
+  #     Port: 80
+  #     HealthCheckTimeoutSeconds: 5
+  #     HealthCheckIntervalSeconds: 10
+  #     HealthyThresholdCount: 5
+  #      UnhealthyThresholdCount: 2
+  #     TargetType: instance
+  #     VpcId: vpc-7339af08  # Default
+
+      
   AWSDevopsProCourseLoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -73,4 +90,23 @@ Resources:
           ToPort: 80
           CidrIp: 0.0.0.0/0
 
-
+  # AWSDevOpsAutoScalingGroup:
+  #   Type: AWS::AutoScaling::AutoScalingGroup
+  #   DependsOn: AWSDevOpsAutoTargetGroup
+  #   Properties:
+  #     AutoScalingGroupName: AWSDevOpsAutoScalingGroup
+  #     AvailabilityZones:
+  #       Fn::GetAZs: ''
+  #     MinSize: 1
+  #     MaxSize: 3
+  #     TargetGroupARNs:        
+  #       - !Ref AWSDevOpsAutoTargetGroup
+  #     LaunchConfigurationName:
+  #       Ref: AWSDevOpsLaunchConfig      
+  AWSDevOpsLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: ami-0bba96c31d87e65d9
+      InstanceType: t2.micro
+      SecurityGroups:
+        - Ref: AWSDevopsProCourseLoadBalancerSecurityGroup
