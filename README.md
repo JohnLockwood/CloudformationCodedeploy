@@ -16,10 +16,10 @@ CodeDeploy
 
 ## Current Status
 
-|What|Name in Course|Name in YAML (--> Physical ID)|Working in YAML? Y/N?|
+|What|Name in Course|Name in YAML (sometimes logical / physical)|Working in YAML? Y/N?|
 |--|--|--|--|
 |AWS::IAM::Role|ec2codedeploy|EC2CodeDeployByCFN|Y|
 |AWS::IAM::Role|codedeployer|CodeDeployRoleByCFN|Y|
-|AWS::ElasticLoadBalancingV2::LoadBalancer|acg|Too long/Logical id is AWSDevopsProCourseLoadBalancer|Y|
+|AWS::ElasticLoadBalancingV2::LoadBalancer|acg|AWSDevopsProCourseLoadBalancer|Y|
 |AWS::EC2::SecurityGroup|Part of Load Balancer |AWSDevopsProSecurityGroupPort80|Y|
-|AWS::ElasticLoadBalancingV2::TargetGroup|target|AWSDevOpsAutoTargetGroup|N|
+|AWS::ElasticLoadBalancingV2::TargetGroup|target|AWSDevOpsAutoTargetGroup|Y|

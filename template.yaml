@@ -63,20 +63,20 @@ Resources:
         - subnet-976e46a8
         - subnet-b5ccf49a
   
-  # AWSDevOpsAutoTargetGroup:
-  #   Type: AWS::ElasticLoadBalancingV2::TargetGroup
-  #   Properties:
-  #     Name: AWSDevOpsAutoTargetGroup
-  #     HealthCheckPath: /
-  #     HealthCheckProtocol: HTTP
-  #     Protocol:  HTTP
-  #     Port: 80
-  #     HealthCheckTimeoutSeconds: 5
-  #     HealthCheckIntervalSeconds: 10
-  #     HealthyThresholdCount: 5
-  #      UnhealthyThresholdCount: 2
-  #     TargetType: instance
-  #     VpcId: vpc-7339af08  # Default
+  AWSDevOpsAutoTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: AWSDevOpsAutoTargetGroup
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      Protocol:  HTTP
+      Port: 80
+      HealthCheckTimeoutSeconds: 5
+      HealthCheckIntervalSeconds: 10
+      HealthyThresholdCount: 5
+      UnhealthyThresholdCount: 2
+      TargetType: instance
+      VpcId: vpc-7339af08  # Default
 
       
   AWSDevopsProCourseLoadBalancerSecurityGroup:
