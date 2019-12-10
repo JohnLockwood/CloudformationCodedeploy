@@ -59,9 +59,13 @@ Resources:
       IpAddressType:  ipv4
       SecurityGroups: 
         - Fn::GetAtt: [ AWSDevopsProCourseLoadBalancerSecurityGroup, GroupId ] 
-      Subnets:
-        - subnet-976e46a8
+      Subnets:        
+        - subnet-2c1fb223
+        - subnet-2f71b365
         - subnet-b5ccf49a
+        - subnet-ca300997
+        - subnet-976e46a8
+        - subnet-6e0f130a
   
   AWSDevOpsAutoTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -90,23 +94,25 @@ Resources:
           ToPort: 80
           CidrIp: 0.0.0.0/0
 
-  # AWSDevOpsAutoScalingGroup:
-  #   Type: AWS::AutoScaling::AutoScalingGroup
-  #   DependsOn: AWSDevOpsAutoTargetGroup
-  #   Properties:
-  #     AutoScalingGroupName: AWSDevOpsAutoScalingGroup
-  #     AvailabilityZones:
-  #       Fn::GetAZs: ''
-  #     MinSize: 1
-  #     MaxSize: 3
-  #     TargetGroupARNs:        
-  #       - !Ref AWSDevOpsAutoTargetGroup
-  #     LaunchConfigurationName:
-  #       Ref: AWSDevOpsLaunchConfig      
+  AWSDevOpsAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    DependsOn: AWSDevOpsAutoTargetGroup
+    Properties:
+      AutoScalingGroupName: AWSDevOpsAutoScalingGroup
+      AvailabilityZones:
+        Fn::GetAZs: ''
+      MinSize: 1
+      MaxSize: 3
+      TargetGroupARNs:        
+        - !Ref AWSDevOpsAutoTargetGroup
+      LaunchConfigurationName:
+        Ref: AWSDevOpsLaunchConfig      
+        
   AWSDevOpsLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
-      ImageId: ami-0bba96c31d87e65d9
+      LaunchConfigurationName: AWSDevOpsLaunchConfiguration
+      ImageId:  ami-00068cd7555f543d5
       InstanceType: t2.micro
       SecurityGroups:
         - Ref: AWSDevopsProCourseLoadBalancerSecurityGroup
