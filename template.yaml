@@ -82,7 +82,7 @@ Resources:
   AWSDevopsProCourseLoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: AWSDevopsProLoadBalancer
+      GroupName: AWSDevopsProSecurityGroupPort80
       GroupDescription: Allow HTTP on Port 80 for load balancer
       SecurityGroupIngress:
         - IpProtocol: tcp
